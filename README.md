@@ -1,3 +1,27 @@
+# destat-lecture
+
+This repository is a monorepo:
+
+- `destat-contract/`: Hardhat contracts + tests
+- `destat-ui/`: React Router UI
+
+## destat-contract
+
+```shell
+cd destat-contract
+npx hardhat test
+```
+
+## destat-ui
+
+```shell
+cd destat-ui
+npm install
+npm run dev
+```
+
+---
+
 # Sample Hardhat 3 Beta Project (`mocha` and `ethers`)
 
 This project showcases a Hardhat 3 Beta project using `mocha` for tests and the `ethers` library for Ethereum interactions.

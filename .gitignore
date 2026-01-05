@@ -1,22 +1,31 @@
 # Node modules
-/node_modules
+node_modules/
 
 # Compilation output
-/dist
+dist/
 
 # pnpm deploy output
-/bundle
+bundle/
 
 # Hardhat Build Artifacts
-/artifacts
+artifacts/
 
 # Hardhat compilation (v2) support directory
-/cache
+cache/
 
 # Typechain output
-/types
+types/
 
 # Hardhat coverage reports
-/coverage
+coverage/
 
-/.vscode
+.vscode/
+
+# React Router / builds
+.react-router/
+build/
+
+# Env / OS
+.env
+.env.local
+.DS_Store
