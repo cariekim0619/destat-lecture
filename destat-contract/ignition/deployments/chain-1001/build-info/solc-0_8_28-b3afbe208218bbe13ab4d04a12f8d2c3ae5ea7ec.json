@@ -1,0 +1,43 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-b3afbe208218bbe13ab4d04a12f8d2c3ae5ea7ec",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/SurveyFactory.sol": "project/contracts/SurveyFactory.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": [],
+      "viaIR": true
+    },
+    "sources": {
+      "project/contracts/Survey.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.28;\n\nstruct Question {\n    string question;\n    string[] options;\n}\n\nstruct Answer {\n    address respondent;\n    uint8[] answers;\n}\n\ncontract Survey {\n    string public title;\n    string public description;\n    uint256 public targetNumber;\n    uint256 public rewardAmount;\n    Question[] questions;\n    Answer[] answers;\n\n    // primitive: int, bool, uint\n    // memory, storage, calldata\n    constructor(string memory _title, string memory _description, uint256 _targetNumber, Question[] memory _questions) payable{\n        title = _title;\n        description = _description;\n        targetNumber = _targetNumber;\n        rewardAmount = msg.value / _targetNumber;\n\n        for (uint i = 0; i < _questions.length; i++) {\n            questions.push(Question({question: _questions[i].question, options: _questions[i].options}));\n        }\n    }\n\n    function submitAnswers(Answer calldata _answer) external {\n        // length validation\n        require(_answer.answers.length == questions.length, \"Mismatched answers length\");\n        require(answers.length < targetNumber, \"This survey has been ended\");\n        \n        answers.push(Answer({respondent: _answer.respondent, answers: _answer.answers}));\n        payable(msg.sender).transfer(rewardAmount);\n    }\n\n    function getAnswers() external view returns (Answer[] memory) {\n        return answers;\n    }\n\n    function getQuestions() external view returns (Question[] memory) {\n        return questions;\n    }\n}\n"
+      },
+      "project/contracts/SurveyFactory.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.28;\n\nimport \"./Survey.sol\";\n\nstruct SurveySchema {\n    string title;\n    string description;\n    uint256 targetNumber;\n    Question[] questions;\n}\n\nevent SurveyCreated(address surveyAddress);\n\ncontract SurveyFactory {\n    uint256 min_pool_amount;\n    uint256 min_reward_amount;\n    Survey[] surveys;\n\n    // ex\n    // min pool amount : 50 eth\n    // target respondents number : 100\n    // reward : 50 eth / 100 == 0.5 eth\n\n    constructor(uint256 _min_pool_amount, uint256 _min_reward_amount) {\n        min_pool_amount = _min_pool_amount;\n        min_reward_amount = _min_reward_amount;\n    }\n\n    function createSurvey(SurveySchema calldata _survey) external payable {\n        require(msg.value >= min_pool_amount, \"Insufficient pool amount\");\n        require(msg.value / _survey.targetNumber >= min_reward_amount, \"Insufficient reward amount\");\n\n        Survey survey = new Survey{value: msg.value} (_survey.title, _survey.description, _survey.targetNumber, _survey.questions);\n\n        surveys.push(survey);\n        emit SurveyCreated(address(survey));\n    }\n\n    function getSurveys() external view returns (Survey[] memory) {\n        return surveys;\n    }\n}"
+      }
+    }
+  }
+}

@@ -32,3 +32,4 @@ build/
 
 # Vercel
 .vercel/
+destat-ui/.env.example
