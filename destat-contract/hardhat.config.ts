@@ -34,5 +34,11 @@ export default defineConfig({
       url: configVariable("SEPOLIA_RPC_URL"),
       accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
     },
+    kairos: {
+      type: "http",
+      chainType: "l1",
+      url: configVariable("KAIROS_RPC_URL"),
+      accounts: [configVariable("KAIROS_PRIVATE_KEY")],
+    },
   },
 });

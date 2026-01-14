@@ -29,3 +29,7 @@ build/
 .env
 .env.local
 .DS_Store
+
+# Vercel
+.vercel/
+destat-ui/.env.example

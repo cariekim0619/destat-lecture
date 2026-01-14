@@ -9,8 +9,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu";
-import { Button } from "~/components/ui/button";
-import { rabbykit } from "~/root";
+import WalletButton from "~/components/wallet-button";
 
 export default function Navigation() {
   return (
@@ -22,9 +21,9 @@ export default function Navigation() {
         <NavigationMenu>
         <NavigationMenuList>
             <NavigationMenuItem>
-                <Link to="/dashboard" className={navigationMenuTriggerStyle()}>
-                    Dashboard
-                </Link>
+                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                    <Link to="/dashboard">Dashboard</Link>
+                </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
                 <NavigationMenuTrigger>Survey</NavigationMenuTrigger>
@@ -145,9 +144,7 @@ export default function Navigation() {
             </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
-        <Button onClick={() => {rabbykit.open();}}>
-            Connect
-        </Button>
+        <WalletButton />
         </div>
     </nav>
   );
